@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7.12
+    ports:
+      - '3306:3306'
+    environment:
+       MYSQL_DATABASE: 'django'
+       MYSQL_USER: 'admin'
+       MYSQL_PASSWORD: 'admin'
+       MYSQL_ROOT_PASSWORD: 'root'
+
+  web:
+    build: .
+    command: bash /code/setup/docker/django/run.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      MYSQL_SERVICE_HOST: db
